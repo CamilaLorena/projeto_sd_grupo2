@@ -1,0 +1,37 @@
+$date
+  Fri Jul 24 19:59:45 2026
+$end
+$version
+  GHDL v0
+$end
+$timescale
+  1 fs
+$end
+$scope module standard $end
+$upscope $end
+$scope module std_logic_1164 $end
+$upscope $end
+$scope module numeric_std $end
+$upscope $end
+$scope module fp_adder_test $end
+$var reg 1 ! sign1 $end
+$var reg 1 " sign2 $end
+$var reg 4 # exp1[3:0] $end
+$var reg 4 $ exp2[3:0] $end
+$var reg 8 % frac1[7:0] $end
+$var reg 8 & frac2[7:0] $end
+$var reg 1 ' sign_out $end
+$var reg 4 ( exp_out[3:0] $end
+$var reg 8 ) frac_out[7:0] $end
+$upscope $end
+$enddefinitions $end
+#0
+0!
+0"
+b1000 #
+b1000 $
+b10101010 %
+b10101010 &
+U'
+bUUUU (
+bUUUUUUUU )
