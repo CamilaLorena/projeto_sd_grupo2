@@ -31,29 +31,29 @@ begin
     begin
         if rising_edge(ADC_CLK_10) then
             if (KEY(1)='0') then
-                sign1 := '0';
-                sign2 := '0';
-                frac1 := "00000000";
-                frac2 := "00000000";
-                exp1 := "0000";
-                exp2 := "0000";
+                sign1 <= '0';
+                sign2 <= '0';
+                frac1 <= "00000000";
+                frac2 <= "00000000";
+                exp1 <= "0000";
+                exp2 <= "0000";
             else
                 if (KEY(0)='0') then
                     if contador = 0 then
                         sign1 <= sw(9);
-                        frac1 <= sw(8 downto 1);
+                        frac1 <= unsigned(sw(8 downto 1));
                         contador <= 1;
                     
                     elsif contador = 1 then
-                        exp1 <= sw(9 downto 6);
+                        exp1 <= unsigned(sw(9 downto 6));
                         contador <= 2;
                     
                     elsif contador = 3 then
                         sign2 <= sw(9);
-                        frac2 <= sw(8 downto 1);
+                        frac2 <= unsigned(sw(8 downto 1));
                         contador <= 4;
                     elsif contador = 4 then
-                        exp2 <= sw(9 downto 6);
+                        exp2 <= unsigned(sw(9 downto 6));
                         contador <= 0;
                     end if;
                 end if;
