@@ -2,17 +2,18 @@ library ieee;
 use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
-entity fp_adder is
+entity fp_adder_de10_v1 is
     port (
-        SW : in std_logic (9 downto 0);
+        ADC_CLK_10 : in std_logic;
+        SW : in std_logic_vector (9 downto 0);
         KEY : in std_logic_vector (1 downto 0);
         sign_out : out std_logic;
         exp_out : out std_logic_vector (3 downto 0);
-        frac_out : out std_logic_vector (7 downto 0);
+        frac_out : out std_logic_vector (7 downto 0)
     );
-end fp_adder;
+end fp_adder_de10_v1;
 
-architecture arch of fp_adder is
+architecture arch of fp_adder_de10_v1 is
     -- suffix b, s, a, n for
     -- big, small, aligned, normalized number
     signal contador : integer range 0 to 4;
@@ -54,7 +55,10 @@ begin
                     elsif contador = 4 then
                         exp2 <= sw(9 downto 6);
                         contador <= 0;
-                    
+                    end if;
+                end if;
+            end if;
+        end if;
 
         if (exp1 & frac1) > (exp2 & frac2) then
             signb <= sign1;
