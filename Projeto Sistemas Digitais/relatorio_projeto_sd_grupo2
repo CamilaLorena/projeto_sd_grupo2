@@ -1,1 +1,10 @@
+Tutorial: Implementação de Somador Ponto Flutuante na DE10-Lite
+Autores: Sofia Bortolazo, Camila Lorena, Victor Felippe Dias
+Disciplina: Sistemas Digitais Q2.2026
+Data: 07/08/2026
+
+~~~~~~~~~~~Etapa 1 ~~~~~~~~~~~~~~
+1. Objetivo do Projeto
+Este projeto adapta o somador de ponto flutuante simplificado (13 bits: 1 bit de sinal, 4 bits de expoente, 8 bits de fração) do livro-texto para a placa Terasic DE10-Lite (MAX 10). 
+O objetivo é demonstrar a síntese lógica e a simulação de hardware utilizando a linguagem VHDL, partindo de um projeto teórico validado por simulação (GHDL/GTKWave) até o funcionamento físico na placa.
 
