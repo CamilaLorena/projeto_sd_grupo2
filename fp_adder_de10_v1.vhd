@@ -11,7 +11,6 @@ entity fp_adder_de10_v1 is
         exp_out    : out std_logic_vector (3 downto 0);
         frac_out   : out std_logic_vector (7 downto 0);
         
-        -- 6 Displays Declarados
         HEX0       : out std_logic_vector (6 downto 0);
         HEX1       : out std_logic_vector (6 downto 0);
         HEX2       : out std_logic_vector (6 downto 0);
@@ -36,33 +35,28 @@ architecture arch of fp_adder_de10_v1 is
     signal key0_r1, key0_r2 : std_logic := '1';
     signal key0_pulse : std_logic;
 
-    -- Sinais para armazenar os dígitos decimais (BCD)
     signal exp_dez, exp_uni : unsigned(3 downto 0);
     signal frac_cen, frac_dez, frac_uni : unsigned(3 downto 0);
 
-    -- =================================================================
-    -- FUNÇÃO DECODIFICADORA: Binário (0 a 9) para Display de 7 Segmentos
-    -- =================================================================
     function decode_7seg(hex_val : unsigned(3 downto 0)) return std_logic_vector is
     begin
         case hex_val is
-            when "0000" => return "1000000"; -- 0
-            when "0001" => return "1111001"; -- 1
-            when "0010" => return "0100100"; -- 2
-            when "0011" => return "0110000"; -- 3
-            when "0100" => return "0011001"; -- 4
-            when "0101" => return "0010010"; -- 5
-            when "0110" => return "0000010"; -- 6
-            when "0111" => return "1111000"; -- 7
-            when "1000" => return "0000000"; -- 8
-            when "1001" => return "0010000"; -- 9
-            when others => return "1111111"; -- Desligado (Proteção)
+            when "0000" => return "1000000";
+            when "0001" => return "1111001";
+            when "0010" => return "0100100";
+            when "0011" => return "0110000";
+            when "0100" => return "0011001";
+            when "0101" => return "0010010";
+            when "0110" => return "0000010";
+            when "0111" => return "1111000";
+            when "1000" => return "0000000";
+            when "1001" => return "0010000";
+            when others => return "1111111";
         end case;
     end function;
 
 begin
 
-    -- 1. Detector de borda para o Botão
     process(ADC_CLK_10)
     begin
         if rising_edge(ADC_CLK_10) then
@@ -73,11 +67,10 @@ begin
     key0_pulse <= '1' when key0_r2 = '1' and key0_r1 = '0' else '0';
 
 
-    -- 2. Máquina de Estados (Entrada de Dados)
     process (ADC_CLK_10)
     begin
         if rising_edge(ADC_CLK_10) then
-            if (KEY(1)='0') then -- RESET
+            if (KEY(1)='0') then 
                 sign1 <= '0'; sign2 <= '0';
                 frac1 <= (others => '0'); frac2 <= (others => '0');
                 exp1 <= (others => '0'); exp2 <= (others => '0');
@@ -105,7 +98,6 @@ begin
         end if;
     end process;
 
-    -- 3. Ordenação (Qual é o maior número)
     process (exp1, frac1, exp2, frac2, sign1, sign2)
     begin
         if (exp1 & frac1) > (exp2 & frac2) then
@@ -115,7 +107,6 @@ begin
         end if;
     end process;
 
-    -- 4. Alinhamento
     exp_diff <= expb - exps;
     with exp_diff select fraca <=
         fracs when "0000",
@@ -128,11 +119,9 @@ begin
         "0000000" & fracs (7) when "0111",
         "00000000" when others;
 
-    -- 5. Soma/Subtração
     sum <= ('0' & fracb) + ('0' & fraca) when signb = signs else
            ('0' & fracb) - ('0' & fraca);
 
-    -- 6. Normalização
     leado <= "000" when (sum(7) = '1') else
              "001" when (sum(6) = '1') else
              "010" when (sum(5) = '1') else
@@ -167,49 +156,34 @@ begin
     end process;
 
 
-    -- =================================================================
-    -- CONVERSÃO: Binário para BCD (Decimal)
-    -- =================================================================
     process(fracn, expn)
         variable f_int : integer range 0 to 255;
         variable e_int : integer range 0 to 15;
     begin
-        -- Transforma os vetores binários em números inteiros do VHDL
         f_int := to_integer(fracn);
         e_int := to_integer(expn);
 
-        -- Separa os dígitos do Expoente (0 a 15)
         exp_dez <= to_unsigned(e_int / 10, 4);
         exp_uni <= to_unsigned(e_int mod 10, 4);
 
-        -- Separa os dígitos da Fração (0 a 255)
         frac_cen <= to_unsigned(f_int / 100, 4);
         frac_dez <= to_unsigned((f_int mod 100) / 10, 4);
         frac_uni <= to_unsigned(f_int mod 10, 4);
     end process;
-
-    
-    -- =================================================================
-    -- ATRIBUIÇÃO DOS RESULTADOS AOS DISPLAYS DE 7 SEGMENTOS
-    -- Ordem física (Esquerda -> Direita): HEX5, HEX4, HEX3, HEX2, HEX1, HEX0
-    -- =================================================================
     
     sign_out <= signb; 
     exp_out  <= std_logic_vector(expn);
     frac_out <= std_logic_vector(fracn);
 
-    -- HEX 5: Exibe o SINAL do resultado na extrema esquerda (0 ou 1)
     with signb select HEX5 <=
-        "1000000" when '0',
-        "1111001" when '1',
+        "1111111" when '0',
+        "0111111" when '1',
         "1111111" when others;
 
-    -- HEX 4, 3 e 2: Fração convertida para Decimal no meio
     HEX4 <= decode_7seg(frac_cen);
     HEX3 <= decode_7seg(frac_dez);
     HEX2 <= decode_7seg(frac_uni);
 
-    -- HEX 1 e 0: Expoente convertido para Decimal na extrema direita
     HEX1 <= decode_7seg(exp_dez);
     HEX0 <= decode_7seg(exp_uni);
 
