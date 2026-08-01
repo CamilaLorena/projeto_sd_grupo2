@@ -17,7 +17,7 @@ O somador é organizado em 4 estágios combinacionais:
     Trata dois casos especiais: carry out (sum(8)='1', desloca à direita e soma 1 ao expoente) e underflow (leado > expb, resultado zerado).
 
 Exemplo: 
-0 00110110 0011 (+0.52E3) (que corresponde a 0.52 * 2^3 ) 
+0 00110110 0011 (+0.54E3) (que corresponde a 0.54 * 2^3 ) 
 1 01010111 0100 (-0.87E4) (que corresponde a -0.87 * 2^4 ) 
 
 Etapa 1: Ordenar os números, em ordem crescente, considerando também o sinal 
