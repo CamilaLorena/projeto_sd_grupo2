@@ -3,8 +3,9 @@ use ieee.std_logic_1164.all;
 use ieee.numeric_std.all;
 
 -- Testbench para fp_adder_de10_v1
--- Requer VHDL-2008 (usa "external names" para acessar os sinais
--- internos expn e fracn do DUT, já que eles não são portas).
+-- Requer VHDL-2008 (usa "while" na declaração de processo e outras
+-- construções modernas). expn e fracn (internos do DUT) são vistos
+-- diretamente no GTKWave, sem necessidade de portas extras.
 
 entity fp_adder_test is
 end fp_adder_test;
@@ -24,6 +25,11 @@ architecture sim of fp_adder_test is
     signal LEDR       : std_logic_vector (3 downto 0);
 
     constant CLK_PERIOD : time := 20 ns;
+
+    -- Flag usada para encerrar o processo de clock quando os testes acabarem,
+    -- evitando que a simulação rode para sempre (o clk_process, sozinho,
+    -- geraria bordas indefinidamente).
+    signal sim_finished : boolean := false;
 
     -- OBS: expn e fracn são sinais internos da arquitetura "arch" do DUT
     -- (não são portas). Não precisamos de external names para vê-los:
@@ -53,10 +59,13 @@ begin
     -- Geração do clock
     clk_process: process
     begin
-        ADC_CLK_10 <= '0';
-        wait for CLK_PERIOD / 2;
-        ADC_CLK_10 <= '1';
-        wait for CLK_PERIOD / 2;
+        while not sim_finished loop
+            ADC_CLK_10 <= '0';
+            wait for CLK_PERIOD / 2;
+            ADC_CLK_10 <= '1';
+            wait for CLK_PERIOD / 2;
+        end loop;
+        wait; -- suspende definitivamente, encerrando a simulação
     end process;
 
     -- Testes de cálculos
@@ -129,6 +138,9 @@ begin
         run_case("Caso 3",
                   '1', "0111", "11000000",
                   '1', "0111", "10000000");
+
+        report "Testes concluidos.";
+        sim_finished <= true;
 
         wait;
     end process;
