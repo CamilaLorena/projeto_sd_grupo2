@@ -1,7 +1,0 @@
-v 3
-file . "fp_adder_test.vhd" "20260725011218.000" "20260724221243.000":
-  entity fp_adder_test at 1( 0) + 0 on 13;
-  architecture sim of fp_adder_test at 8( 114) + 0 on 14;
-file . "fp_adder.vhd" "20260725011042.000" "20260724221203.374":
-  entity fp_adder at 1( 0) + 0 on 11;
-  architecture arch of fp_adder at 16( 411) + 0 on 12;
