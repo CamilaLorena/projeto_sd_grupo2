@@ -824,8 +824,7 @@ Utilizamos o Gemini e o Claude para auxiliar no entendimento inicial do código,
 
 ## 6. Contribuição dos participantes
 
-- Sofia Bortolazo — Redação do manuscrito original\]
+- Sofia Bortolazo — Redação do manuscrito original, Redação-revisão e edição,  Análise Formal.
 
-- Camila Lorena — \[preencher\]
-
-- \[Victor Felippe Dias\] — \[preencher\]
+- Camila Lorena — Redação do manuscrito original, Análise Formal, Desenvolvimento, implementação e teste de software.
+- Victor Felippe Dias — Redação do manuscrito original, Validação de dados e experimento, Redação-revisão e edição.
