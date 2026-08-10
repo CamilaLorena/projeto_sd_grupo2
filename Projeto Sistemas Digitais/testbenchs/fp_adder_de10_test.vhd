@@ -31,10 +31,6 @@ architecture sim of fp_adder_test is
     -- geraria bordas indefinidamente).
     signal sim_finished : boolean := false;
 
-    -- OBS: expn e fracn são sinais internos da arquitetura "arch" do DUT
-    -- (não são portas). Não precisamos de external names para vê-los:
-    -- basta dar dump da hierarquia inteira na simulação e abrir no
-    -- GTKWave, onde eles aparecem em uut/expn e uut/fracn.
 
 begin
 
@@ -146,3 +142,4 @@ begin
     end process;
 
 end sim;
+
